@@ -2,6 +2,8 @@ package com.foxminded.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Data;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "groups")
+@Data
+@Setter
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,37 +42,5 @@ public class Group {
         this.groupId = groupId;
         this.groupName = groupName;
         this.students = students;
-    }
-
-    public long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(long groupId) {
-        this.groupId = groupId;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
-    public List<ScheduleItem> getScheduleItems() {
-        return scheduleItems;
-    }
-
-    public void setScheduleItems(List<ScheduleItem> scheduleItems) {
-        this.scheduleItems = scheduleItems;
     }
 }

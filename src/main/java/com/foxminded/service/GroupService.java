@@ -1,5 +1,6 @@
 package com.foxminded.service;
 
+import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Group;
 import com.foxminded.model.Student;
 
@@ -13,7 +14,7 @@ public interface GroupService {
 
     void delete(Group group);
 
-    Group findGroupById(long id);
+    Group findGroupById(long id) throws EntityNotFoundException;
 
     Group update(Group group);
 

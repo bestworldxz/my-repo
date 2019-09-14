@@ -2,6 +2,7 @@ package com.foxminded.service.impl;
 
 import com.foxminded.dao.GroupDao;
 import com.foxminded.dao.StudentDao;
+import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Group;
 import com.foxminded.model.Student;
 import com.foxminded.service.GroupService;
@@ -47,13 +48,10 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group findGroupById(long id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("Id cannot has negative value.");
-        }
+    public Group findGroupById(long id) throws EntityNotFoundException {
         Group group = groupDao.findGroupByGroupId(id);
-        if (group == null) {
-            throw new NullPointerException(String.format("Group with id %d not found.", id));
+        if (group == null){
+            throw new EntityNotFoundException(Group.class, id);
         }
         return group;
     }
