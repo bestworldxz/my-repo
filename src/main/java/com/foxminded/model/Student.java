@@ -1,5 +1,7 @@
 package com.foxminded.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -22,6 +24,7 @@ public class Student {
 
     @ManyToOne()
     @JoinColumn(name = "group_id")
+    @JsonBackReference
     private Group group;
 
     public Student() {

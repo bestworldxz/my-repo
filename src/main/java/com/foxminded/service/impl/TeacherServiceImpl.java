@@ -79,14 +79,4 @@ public class TeacherServiceImpl implements TeacherService {
                 scheduleItem.getClassRoom().getClassRoom(), teacher.getFirstName(), teacher.getLastName());
     }
 
-    @Override
-    public void assignCourses(Course course, Teacher teacher) {
-        if (course == null || teacher == null) {
-            throw new NullPointerException("Object cannot be null");
-        }
-        teacher.getCourses().add(course);
-        teacherDao.save(teacher);
-        logger.debug("Course {} assigned to teacher {} {}.", course.getCourseName(),
-                teacher.getFirstName(), teacher.getLastName());
-    }
 }

@@ -1,5 +1,8 @@
 package com.foxminded.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -24,10 +27,12 @@ public class ScheduleItem implements Comparable<ScheduleItem> {
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonBackReference
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "class_room_id")
+    @JsonBackReference
     private ClassRoom classRoom;
 
     public ScheduleItem() {

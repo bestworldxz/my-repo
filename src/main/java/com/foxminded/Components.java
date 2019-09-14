@@ -31,11 +31,12 @@ public class Components implements ApplicationRunner {
 
         List<Group> group = groupDomain.createGroup(22);
         studentDomain.createStudents(group, 8, 18);
-        List<Teacher> teachers = teacherDomain.createTeacher(12);
-        List<ClassRoom> classRooms = classRoomDomain.createClassRooms(20);
-        List<Course> courses = courseDomain.createCourses();
-        List<ScheduleItem> scheduleItems = scheduleItemDomain.createScheduleItems(group, teachers, courses);
-        universityDomain.createSchedule(scheduleItems, classRooms);
+//        List<Teacher> teachers = teacherDomain.createTeacher(12);
+//        List<ClassRoom> classRooms = classRoomDomain.createClassRooms(20);
+//        List<Course> courses = courseDomain.createCourses();
+//        List<ScheduleItem> scheduleItems = scheduleItemDomain.createScheduleItems(group, teachers, courses);
+//        courseDomain.assignCourses(scheduleItems, teachers);
+//        universityDomain.createSchedule(scheduleItems, classRooms);
     }
 
     @Override

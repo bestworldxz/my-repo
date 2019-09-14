@@ -1,5 +1,8 @@
 package com.foxminded.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +22,11 @@ public class Teacher {
     private String lastName;
 
     @OneToMany(mappedBy = "teacher")
+    @JsonIgnore
     private List<ScheduleItem> scheduleItems;
 
     @OneToMany(mappedBy = "teacher")
+    @JsonManagedReference
     private List<Course> courses;
 
     public Teacher() {

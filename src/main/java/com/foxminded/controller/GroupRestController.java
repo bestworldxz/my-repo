@@ -5,11 +5,10 @@ import com.foxminded.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,30 +19,30 @@ public class GroupRestController {
     private GroupService groupService;
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<Group> getGroup(@PathVariable("id") Long groupId) {
-        if (groupId == null) {
+    public ResponseEntity<Group> getGroup(@PathVariable("id") Long groupId){
+        if (groupId == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Group group = groupService.findGroupById(groupId);
 
-        if (group == null) {
+        if (group == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(group, HttpStatus.OK);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<List<Group>> groupList() {
+    public ResponseEntity<List<Group>> groupList(){
         List<Group> groups = groupService.findAll();
-        if (groups.isEmpty()) {
+        if (groups.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(groups, HttpStatus.OK);
     }
 
     @RequestMapping(value = "{groupName}", method = RequestMethod.POST)
-    public ResponseEntity<Group> create(@PathVariable("groupName") String groupName) {
-        if (groupName.equals("")) {
+    public ResponseEntity<Group> create(@PathVariable("groupName") String groupName){
+        if (groupName.equals("")){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Group group = groupService.createGroup(groupName);
@@ -51,12 +50,12 @@ public class GroupRestController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Group> delete(@PathVariable("id") Long groupId) {
-        if (groupId == null) {
+    public ResponseEntity<Group> delete(@PathVariable("id") Long groupId){
+        if (groupId == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Group group = groupService.findGroupById(groupId);
-        if (group == null) {
+        if (group == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         groupService.delete(group);
@@ -64,12 +63,12 @@ public class GroupRestController {
     }
 
     @RequestMapping(value = "{id}/{newGroupName}", method = RequestMethod.PUT)
-    public ResponseEntity<Group> update(@PathVariable("id") Long id, @PathVariable("newGroupName") String newGroupName) {
-        if (id == null || newGroupName.equals("")) {
+    public ResponseEntity<Group> update(@PathVariable("id") Long id, @PathVariable("newGroupName") String newGroupName){
+        if (id == null || newGroupName.equals("")){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Group group = groupService.findGroupById(id);
-        if (group == null) {
+        if (group == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         group.setGroupName(newGroupName);

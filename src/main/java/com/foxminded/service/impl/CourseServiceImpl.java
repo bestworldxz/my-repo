@@ -2,6 +2,7 @@ package com.foxminded.service.impl;
 
 import com.foxminded.dao.CourseDao;
 import com.foxminded.model.Course;
+import com.foxminded.model.Teacher;
 import com.foxminded.service.CourseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,5 +50,17 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> findAll() {
         return courseDao.findAll();
+    }
+
+    @Override
+    public void assignCourses(Course course, Teacher teacher) {
+        if (course == null || teacher == null) {
+            throw new NullPointerException("Object cannot be null");
+        }
+        teacher.getCourses().add(course);
+        course.setTeacher(teacher);
+        courseDao.save(course);
+        logger.debug("Course {} assigned to teacher {} {}.", course.getCourseName(),
+                teacher.getFirstName(), teacher.getLastName());
     }
 }

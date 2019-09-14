@@ -15,7 +15,7 @@ public interface GroupService {
 
     Group findGroupById(long id);
 
-    void update(Group group);
+    Group update(Group group);
 
     void assignStudents(Group group, Student student);
 

@@ -20,6 +20,4 @@ public interface TeacherService {
     Teacher findTeacherById(long id);
 
     void assignSchedule(ScheduleItem scheduleItem, Teacher teacher);
-
-    void assignCourses(Course course, Teacher teacher);
 }

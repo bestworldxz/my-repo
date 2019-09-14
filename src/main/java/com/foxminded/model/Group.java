@@ -1,5 +1,8 @@
 package com.foxminded.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +19,11 @@ public class Group {
     private String groupName;
 
     @OneToMany(mappedBy = "group", orphanRemoval = true)
+    @JsonManagedReference
     private List<Student> students;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ScheduleItem> scheduleItems;
 
     public Group() {

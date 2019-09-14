@@ -1,6 +1,8 @@
 package com.foxminded.domain;
 
 import com.foxminded.model.Course;
+import com.foxminded.model.ScheduleItem;
+import com.foxminded.model.Teacher;
 import com.foxminded.service.CourseService;
 import org.springframework.stereotype.Component;
 
@@ -23,5 +25,19 @@ public class CourseDomain {
             courses.add(courseService.createCourse(course_name));
         }
         return courses;
+    }
+
+    public void assignCourses(List<ScheduleItem> scheduleItems, List<Teacher> teachers) {
+        if (scheduleItems == null || teachers == null) {
+            throw new NullPointerException("Objects cannot be null");
+        }
+        for (Teacher teacher : teachers) {
+            for (ScheduleItem scheduleItem : scheduleItems) {
+                if (scheduleItem.getTeacher().equals(teacher)) {
+                    Course course = scheduleItem.getCourse();
+                    courseService.assignCourses(course, teacher);
+                }
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.foxminded.service;
 
 import com.foxminded.model.Course;
+import com.foxminded.model.Teacher;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface CourseService {
     void updateCourse(Course course);
 
     List<Course> findAll();
+
+    void assignCourses(Course course, Teacher teacher);
 }

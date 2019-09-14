@@ -59,12 +59,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void update(Group group) {
+    public Group update(Group group) {
         if (group == null) {
             throw new NullPointerException("Group cannot be null");
         }
         groupDao.save(group);
         logger.debug("Group {} updated.", group.getGroupName());
+        return group;
     }
 
     @Override
