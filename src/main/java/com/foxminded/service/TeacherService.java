@@ -1,5 +1,6 @@
 package com.foxminded.service;
 
+import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Course;
 import com.foxminded.model.ScheduleItem;
 import com.foxminded.model.Teacher;
@@ -11,13 +12,13 @@ public interface TeacherService {
 
     Teacher createTeacher(String firstName, String lastName);
 
-    void updateTeacher(Teacher teacher);
+    void updateTeacher(Teacher teacher) throws EntityNotFoundException;
 
-    void deleteTeacher(Teacher teacher);
+    void deleteTeacher(Teacher teacher) throws EntityNotFoundException;
 
     List<Teacher> findAll();
 
-    Teacher findTeacherById(long id);
+    Teacher findTeacherById(long id) throws EntityNotFoundException;
 
-    void assignSchedule(ScheduleItem scheduleItem, Teacher teacher);
+    void assignSchedule(ScheduleItem scheduleItem, Teacher teacher) throws EntityNotFoundException;
 }

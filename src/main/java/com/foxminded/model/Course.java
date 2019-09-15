@@ -1,11 +1,19 @@
 package com.foxminded.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "course")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Course {
 
     @Id
@@ -16,40 +24,13 @@ public class Course {
     @Column(name = "course_name")
     private String courseName;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "teacher_id")
     @JsonBackReference
     private Teacher teacher;
 
-    public Course() {
-
-    }
-
     public Course(String courseName) {
-        this.courseName = courseName;
+        this(0, courseName, null);
     }
 
-    public long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(long courseId) {
-        this.courseId = courseId;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
 }

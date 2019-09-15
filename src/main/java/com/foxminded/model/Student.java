@@ -1,7 +1,9 @@
 package com.foxminded.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,6 +11,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "students")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Student {
 
     @Id
@@ -24,23 +28,13 @@ public class Student {
     @Column(name = "last_name")
     private String lastName;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "group_id")
     @JsonBackReference
     private Group group;
 
-    public Student() {
-
-    }
-
     public Student(String firstName, String lastName) {
-        this(firstName, lastName, null);
-    }
-
-    public Student(String firstName, String lastName, Group group) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.group = group;
+        this(0, firstName, lastName, null);
     }
 
 }

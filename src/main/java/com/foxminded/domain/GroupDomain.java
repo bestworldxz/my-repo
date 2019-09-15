@@ -1,11 +1,10 @@
 package com.foxminded.domain;
 
+import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Group;
 import com.foxminded.service.GroupService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -22,7 +21,7 @@ public class GroupDomain {
         this.groupService = groupService;
     }
 
-    public List<Group> createGroup(int numberOfGroups) {
+    public List<Group> createGroup(int numberOfGroups) throws EntityNotFoundException{
         List<Group> groups = new ArrayList<>();
         if (numberOfGroups < 0) {
             throw new IllegalArgumentException();

@@ -12,4 +12,6 @@ public interface CourseDao extends CrudRepository<Course, Long> {
     @Override
     List<Course> findAll();
 
+    Course findByCourseNameIn(String courseName);
+
 }

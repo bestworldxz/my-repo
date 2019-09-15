@@ -8,16 +8,16 @@ import java.util.List;
 
 public interface GroupService {
 
-    Group createGroup(String groupName);
+    Group createGroup(String groupName) throws EntityNotFoundException;
 
     List<Group> findAll();
 
-    void delete(Group group);
+    void delete(Group group) throws EntityNotFoundException;
 
     Group findGroupById(long id) throws EntityNotFoundException;
 
-    Group update(Group group);
+    Group update(Group group) throws EntityNotFoundException;
 
-    void assignStudents(Group group, Student student);
+    void assignStudents(Group group, Student student) throws EntityNotFoundException;
 
 }

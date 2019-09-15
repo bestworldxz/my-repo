@@ -1,8 +1,10 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.dao.ClassRoomDao;
+import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.ClassRoom;
 import com.foxminded.service.ClassRoomService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Slf4j
 public class ClassRoomServiceImpl implements ClassRoomService {
-
-    private static final Logger logger = LoggerFactory.getLogger(ClassRoomServiceImpl.class);
 
     @Autowired
     private ClassRoomDao classRoomDao;
@@ -25,7 +26,7 @@ public class ClassRoomServiceImpl implements ClassRoomService {
         }
         ClassRoom classRoom = new ClassRoom(numberOfClassRoom);
         classRoomDao.save(classRoom);
-        logger.debug("Class room {} created.", numberOfClassRoom);
+        log.debug("Class room {} created.", numberOfClassRoom);
         return classRoom;
     }
 
@@ -35,11 +36,11 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     }
 
     @Override
-    public void deleteClassRoom(ClassRoom classRoom) {
+    public void deleteClassRoom(ClassRoom classRoom) throws EntityNotFoundException {
         if (classRoom == null) {
-            throw new NullPointerException("Class room cannot be null.");
+            throw new EntityNotFoundException(ClassRoom.class, classRoom.getClassRoomId());
         }
         classRoomDao.delete(classRoom);
-        logger.debug("Class room {} deleted.", classRoom.getClassRoom());
+        log.debug("Class room {} deleted.", classRoom.getClassRoom());
     }
 }

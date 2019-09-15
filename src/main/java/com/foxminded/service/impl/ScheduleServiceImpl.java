@@ -1,11 +1,13 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.dao.ScheduleItemDao;
+import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Course;
 import com.foxminded.model.Group;
 import com.foxminded.model.ScheduleItem;
 import com.foxminded.model.Teacher;
 import com.foxminded.service.ScheduleItemService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@Slf4j
 public class ScheduleServiceImpl implements ScheduleItemService {
-    private static final Logger logger = LoggerFactory.getLogger(ScheduleServiceImpl.class);
 
     @Autowired
     private ScheduleItemDao scheduleItemDao;
@@ -27,19 +29,19 @@ public class ScheduleServiceImpl implements ScheduleItemService {
             throw new NullPointerException("Object cannot be null.");
         }
         ScheduleItem scheduleItem = new ScheduleItem(localDate, group, teacher, course);
-        logger.debug("Schedule item: date - {}, group - {}, teacher - {} {}, course - {} created.",
+        log.debug("Schedule item: date - {}, group - {}, teacher - {} {}, course - {} created.",
                 localDate, group.getGroupName(), teacher.getFirstName(), teacher.getLastName(), course.getCourseName());
         scheduleItemDao.save(scheduleItem);
         return scheduleItem;
     }
 
     @Override
-    public void update(ScheduleItem scheduleItem) {
+    public void update(ScheduleItem scheduleItem) throws EntityNotFoundException {
         if (scheduleItem == null) {
-            throw new NullPointerException("Schedule item cannot be null.");
+            throw new EntityNotFoundException(ScheduleItem.class, scheduleItem.getId());
         }
         scheduleItemDao.save(scheduleItem);
-        logger.debug("Schedule item: date - {}, group - {}, teacher - {} {}, course - {} updated.",
+        log.debug("Schedule item: date - {}, group - {}, teacher - {} {}, course - {} updated.",
                 scheduleItem.getDate(), scheduleItem.getGroup().getGroupName(),
                 scheduleItem.getTeacher().getFirstName(), scheduleItem.getTeacher().getLastName(),
                 scheduleItem.getCourse().getCourseName());
@@ -51,9 +53,9 @@ public class ScheduleServiceImpl implements ScheduleItemService {
     }
 
     @Override
-    public List<ScheduleItem> findMonthSchedule(Group group) {
+    public List<ScheduleItem> findMonthSchedule(Group group) throws EntityNotFoundException{
         if (group == null) {
-            throw new NullPointerException("Group cannot be null");
+            throw new EntityNotFoundException(Group.class, group.getGroupId());
         }
         return scheduleItemDao.findByGroup(group);
     }

@@ -5,6 +5,7 @@ import com.foxminded.model.Group;
 import com.foxminded.model.ScheduleItem;
 import com.foxminded.model.Teacher;
 import com.foxminded.service.ScheduleItemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
@@ -23,13 +24,14 @@ public class ScheduleItemDomain {
 
     private final ScheduleItemService scheduleItemService;
 
+    @Autowired
     public ScheduleItemDomain(ScheduleItemService scheduleItemService) {
         this.scheduleItemService = scheduleItemService;
     }
 
-    public List<ScheduleItem> createScheduleItems(List<Group> groups, List<Teacher> teachers, List<Course> courses) {
+    public List<ScheduleItem> createScheduleItems(List<Group> groups, List<Teacher> teachers) {
         List<ScheduleItem> scheduleItems = new ArrayList<>();
-        if (groups == null || teachers == null || courses == null) {
+        if (groups == null || teachers == null) {
             throw new NullPointerException();
         }
         for (Group group : groups) {
@@ -39,6 +41,7 @@ public class ScheduleItemDomain {
                     int numberOfCoursesPerDay = ThreadLocalRandom.current().nextInt(MIN_NUMBER_OF_COURSE, MAX_NUMBER_OF_COURSE);
                     while (numberOfCoursesPerDay > 0) {
                         int teacherIndex = ThreadLocalRandom.current().nextInt(teachers.size());
+                        List<Course> courses = teachers.get(teacherIndex).getCourses();
                         int courseIndex = ThreadLocalRandom.current().nextInt(courses.size());
                         ScheduleItem scheduleItem = scheduleItemService.createScheduleItem(next, group, teachers.get(teacherIndex), courses.get(courseIndex));
                         scheduleItems.add(scheduleItem);

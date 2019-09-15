@@ -1,16 +1,12 @@
 package com.foxminded.controller;
 
-import com.foxminded.model.Group;
+import com.foxminded.exception.EntityNotFoundException;
+import com.foxminded.model.Course;
 import com.foxminded.model.Teacher;
+import com.foxminded.service.CourseService;
 import com.foxminded.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,28 +14,49 @@ import java.util.List;
 @RequestMapping(value = "/teachers")
 public class TeacherRestController {
 
-    @Autowired
+
     private TeacherService teacherService;
+    private CourseService courseService;
 
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<Teacher> getTeacher(@PathVariable("id") Long teacherId) {
-        if (teacherId == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        Teacher teacher = teacherService.findTeacherById(teacherId);
-
-        if (teacher == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(teacher, HttpStatus.OK);
+    @Autowired
+    public TeacherRestController(TeacherService teacherService, CourseService courseService) {
+        this.teacherService = teacherService;
+        this.courseService = courseService;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<List<Teacher>> groupList() {
-        List<Teacher> teachers = teacherService.findAll();
-        if (teachers.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(teachers, HttpStatus.OK);
+    @GetMapping()
+    public List<Teacher> teacherList() {
+        return teacherService.findAll();
     }
+
+    @GetMapping(value = "{id}")
+    public Teacher getTeacher(@PathVariable("id") Long teacherId) throws EntityNotFoundException {
+        return teacherService.findTeacherById(teacherId);
+    }
+
+    @PostMapping(value = "{firstName}/{lastName}")
+    public Teacher createTeacher(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName) {
+        return teacherService.createTeacher(firstName, lastName);
+    }
+
+    @DeleteMapping(value = "{id}")
+    public void deleteTeacher(@PathVariable("id") Long id) throws EntityNotFoundException {
+        Teacher teacher = teacherService.findTeacherById(id);
+        teacherService.deleteTeacher(teacher);
+    }
+
+    @DeleteMapping(value = "{id}/{courseName}")
+    public void deleteCourse(@PathVariable("id") Long id, @PathVariable("courseName") String courseName) throws EntityNotFoundException {
+        Course course = courseService.findByCourseName(courseName);
+        courseService.deleteCourse(course);
+    }
+
+    @PutMapping(value = "{id}/{courseName}")
+    public Teacher addCourse(@PathVariable("id") Long id, @PathVariable("courseName") String courseName) throws EntityNotFoundException {
+        Teacher teacher = teacherService.findTeacherById(id);
+        Course course = courseService.createCourse(courseName);
+        courseService.assignCourses(course, teacher);
+        return teacher;
+    }
+
 }

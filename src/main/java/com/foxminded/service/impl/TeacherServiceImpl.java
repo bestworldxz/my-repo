@@ -1,21 +1,19 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.dao.TeacherDao;
-import com.foxminded.model.Course;
+import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.ScheduleItem;
 import com.foxminded.model.Teacher;
 import com.foxminded.service.TeacherService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class TeacherServiceImpl implements TeacherService {
-
-    private static final Logger logger = LoggerFactory.getLogger(TeacherServiceImpl.class);
 
     @Autowired
     private TeacherDao teacherDao;
@@ -27,26 +25,26 @@ public class TeacherServiceImpl implements TeacherService {
         }
         Teacher teacher = new Teacher(firstName, lastName);
         teacherDao.save(teacher);
-        logger.debug("Teacher {} {} created.", firstName, lastName);
+        log.debug("Teacher {} {} created.", firstName, lastName);
         return teacher;
     }
 
     @Override
-    public void updateTeacher(Teacher teacher) {
+    public void updateTeacher(Teacher teacher) throws EntityNotFoundException {
         if (teacher == null) {
-            throw new NullPointerException("Teacher cannot be null.");
+            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
         }
         teacherDao.save(teacher);
-        logger.debug("Teacher {} {} updated.", teacher.getFirstName(), teacher.getLastName());
+        log.debug("Teacher {} {} updated.", teacher.getFirstName(), teacher.getLastName());
     }
 
     @Override
-    public void deleteTeacher(Teacher teacher) {
+    public void deleteTeacher(Teacher teacher) throws EntityNotFoundException {
         if (teacher == null) {
-            throw new NullPointerException("Teacher cannot be null.");
+            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
         }
         teacherDao.delete(teacher);
-        logger.debug("Teacher {} {} deleted.", teacher.getFirstName(), teacher.getLastName());
+        log.debug("Teacher {} {} deleted.", teacher.getFirstName(), teacher.getLastName());
     }
 
     @Override
@@ -55,26 +53,29 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher findTeacherById(long id) {
+    public Teacher findTeacherById(long id) throws EntityNotFoundException {
         if (id <= 0) {
-            throw new IllegalArgumentException("ID cannot be zero or negative.");
+            throw new EntityNotFoundException(Teacher.class, id);
         }
         Teacher teacher = teacherDao.findTeacherByTeacherId(id);
         if (teacher == null) {
-            throw new NullPointerException("Teacher not found.");
+            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
         }
-        logger.debug("Teacher {} {} founded.", teacher.getFirstName(), teacher.getLastName());
+        log.debug("Teacher {} {} founded.", teacher.getFirstName(), teacher.getLastName());
         return teacher;
     }
 
     @Override
-    public void assignSchedule(ScheduleItem scheduleItem, Teacher teacher) {
-        if (scheduleItem == null || teacher == null) {
-            throw new NullPointerException("Object cannot be null");
+    public void assignSchedule(ScheduleItem scheduleItem, Teacher teacher) throws EntityNotFoundException {
+        if (scheduleItem == null) {
+            throw new EntityNotFoundException(ScheduleItem.class, scheduleItem.getId());
+        }
+        if (teacher == null) {
+            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
         }
         teacher.getScheduleItems().add(scheduleItem);
         teacherDao.save(teacher);
-        logger.debug("Schedule: group - {}, course - {}, auditory - {} assigned to teacher {} {}.",
+        log.debug("Schedule: group - {}, course - {}, auditory - {} assigned to teacher {} {}.",
                 scheduleItem.getGroup().getGroupName(), scheduleItem.getCourse().getCourseName(),
                 scheduleItem.getClassRoom().getClassRoom(), teacher.getFirstName(), teacher.getLastName());
     }

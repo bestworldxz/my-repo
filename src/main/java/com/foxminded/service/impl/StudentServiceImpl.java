@@ -3,16 +3,15 @@ package com.foxminded.service.impl;
 import com.foxminded.dao.StudentDao;
 import com.foxminded.model.Student;
 import com.foxminded.service.StudentService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class StudentServiceImpl implements StudentService {
-    private static final Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
 
     @Autowired
     private StudentDao studentDao;
@@ -24,7 +23,7 @@ public class StudentServiceImpl implements StudentService {
         }
         Student student = new Student(firstName, lastName);
         studentDao.save(student);
-        logger.debug("Student {} {} created.", firstName, lastName);
+        log.debug("Student {} {} created.", firstName, lastName);
         return student;
     }
 
@@ -39,7 +38,7 @@ public class StudentServiceImpl implements StudentService {
             throw new NullPointerException("Student name cannot be empty.");
         }
         studentDao.delete(student);
-        logger.debug("Student {} {} deleted.", student.getFirstName(), student.getLastName());
+        log.debug("Student {} {} deleted.", student.getFirstName(), student.getLastName());
     }
 
     @Override
@@ -49,7 +48,7 @@ public class StudentServiceImpl implements StudentService {
         }
         Student student = studentDao.findStudentByStudentId(id);
         if (student != null) {
-            logger.debug("Student {} {} founded.", student.getFirstName(), student.getLastName());
+            log.debug("Student {} {} founded.", student.getFirstName(), student.getLastName());
         } else {
             throw new NullPointerException("Student not found.");
         }
@@ -62,6 +61,6 @@ public class StudentServiceImpl implements StudentService {
             throw new NullPointerException("Student cannot be null.");
         }
         studentDao.save(student);
-        logger.debug("Student {} {} updated.", student.getFirstName(), student.getFirstName());
+        log.debug("Student {} {} updated.", student.getFirstName(), student.getFirstName());
     }
 }

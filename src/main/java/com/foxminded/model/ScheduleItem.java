@@ -2,12 +2,16 @@ package com.foxminded.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "schedule_item")
+@Data
+@NoArgsConstructor
 public class ScheduleItem implements Comparable<ScheduleItem> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +23,12 @@ public class ScheduleItem implements Comparable<ScheduleItem> {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
+    @JsonBackReference
     private Group group;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
+    @JsonBackReference
     private Teacher teacher;
 
     @ManyToOne
@@ -35,63 +41,11 @@ public class ScheduleItem implements Comparable<ScheduleItem> {
     @JsonBackReference
     private ClassRoom classRoom;
 
-    public ScheduleItem() {
-
-    }
-
     public ScheduleItem(LocalDate date, Group group, Teacher teacher, Course course) {
         this.date = date;
         this.group = group;
         this.teacher = teacher;
         this.course = course;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
-    public ClassRoom getClassRoom() {
-        return classRoom;
-    }
-
-    public void setClassRoom(ClassRoom classRoom) {
-        this.classRoom = classRoom;
     }
 
     @Override

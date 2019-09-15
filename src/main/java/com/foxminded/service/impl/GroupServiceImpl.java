@@ -6,6 +6,7 @@ import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Group;
 import com.foxminded.model.Student;
 import com.foxminded.service.GroupService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +15,26 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Slf4j
 public class GroupServiceImpl implements GroupService {
-    private static final Logger logger = LoggerFactory.getLogger(GroupServiceImpl.class);
 
-    @Autowired
     private GroupDao groupDao;
-    @Autowired
     private StudentDao studentDao;
 
+    @Autowired
+    public GroupServiceImpl(GroupDao groupDao, StudentDao studentDao) {
+        this.groupDao = groupDao;
+        this.studentDao = studentDao;
+    }
+
     @Override
-    public Group createGroup(String groupName) {
-        if (groupName.equals("")) {
-            throw new IllegalArgumentException("Group name cannot be empty");
+    public Group createGroup(String groupName) throws EntityNotFoundException {
+        if (groupName.isEmpty()) {
+            throw new EntityNotFoundException(Group.class, groupName);
         }
         Group group = new Group(groupName);
         groupDao.save(group);
-        logger.debug("Group {} created.", groupName);
+        log.debug("Group {} created.", groupName);
         return group;
     }
 
@@ -39,43 +44,46 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void delete(Group group) {
+    public void delete(Group group) throws EntityNotFoundException {
         if (group == null) {
-            throw new NullPointerException("Group cannot be null");
+            throw new EntityNotFoundException(Group.class, group.getGroupId());
         }
         groupDao.delete(group);
-        logger.debug("Group {} deleted.", group.getGroupName());
+        log.debug("Group {} deleted.", group.getGroupName());
     }
 
     @Override
     public Group findGroupById(long id) throws EntityNotFoundException {
         Group group = groupDao.findGroupByGroupId(id);
-        if (group == null){
+        if (group == null) {
             throw new EntityNotFoundException(Group.class, id);
         }
         return group;
     }
 
     @Override
-    public Group update(Group group) {
+    public Group update(Group group) throws EntityNotFoundException {
         if (group == null) {
-            throw new NullPointerException("Group cannot be null");
+            throw new EntityNotFoundException(Group.class, group.getGroupId());
         }
         groupDao.save(group);
-        logger.debug("Group {} updated.", group.getGroupName());
+        log.debug("Group {} updated.", group.getGroupName());
         return group;
     }
 
     @Override
-    public void assignStudents(Group group, Student student) {
-        if (group == null || student == null) {
-            throw new NullPointerException("Object cannot be null");
+    public void assignStudents(Group group, Student student) throws EntityNotFoundException {
+        if (group == null) {
+            throw new EntityNotFoundException(Group.class, group.getGroupId());
+        }
+        if (student == null) {
+            throw new EntityNotFoundException(Student.class, student.getStudentId());
         }
         group.getStudents().add(student);
         student.setGroup(group);
         groupDao.save(group);
         studentDao.save(student);
-        logger.debug("Student {} {} added to group {}.", student.getFirstName(), student.getLastName(), group.getGroupName());
+        log.debug("Student {} {} added to group {}.", student.getFirstName(), student.getLastName(), group.getGroupName());
     }
 }
 

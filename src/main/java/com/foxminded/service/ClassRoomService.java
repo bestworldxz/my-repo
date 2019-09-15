@@ -1,5 +1,6 @@
 package com.foxminded.service;
 
+import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.ClassRoom;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface ClassRoomService {
 
     List<ClassRoom> findAll();
 
-    void deleteClassRoom(ClassRoom classRoom);
+    void deleteClassRoom(ClassRoom classRoom) throws EntityNotFoundException;
 
 
 }

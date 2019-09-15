@@ -1,50 +1,57 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.dao.CourseDao;
+import com.foxminded.dao.TeacherDao;
+import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Course;
 import com.foxminded.model.Teacher;
 import com.foxminded.service.CourseService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class CourseServiceImpl implements CourseService {
-    private static final Logger logger = LoggerFactory.getLogger(CourseServiceImpl.class);
+
+    private CourseDao courseDao;
+    private TeacherDao teacherDao;
 
     @Autowired
-    private CourseDao courseDao;
+    public CourseServiceImpl(CourseDao courseDao, TeacherDao teacherDao) {
+        this.courseDao = courseDao;
+        this.teacherDao = teacherDao;
+    }
 
     @Override
-    public Course createCourse(String courseName) {
+    public Course createCourse(String courseName) throws EntityNotFoundException {
         if (courseName.equals("")) {
-            throw new IllegalArgumentException("Course name cannot be empty.");
+            throw new EntityNotFoundException(Course.class, courseName);
         }
         Course course = new Course(courseName);
-        logger.debug("Course {} created.", courseName);
+        log.debug("Course {} created.", courseName);
         courseDao.save(course);
         return course;
     }
 
     @Override
-    public void deleteCourse(Course course) {
+    public void deleteCourse(Course course) throws EntityNotFoundException {
         if (course == null) {
-            throw new NullPointerException("Course cannot be null.");
+            throw new EntityNotFoundException(Course.class, course.getCourseId());
         }
         courseDao.delete(course);
-        logger.debug("Course {} deleted.", course.getCourseName());
+        log.debug("Course {} deleted.", course.getCourseName());
     }
 
     @Override
-    public void updateCourse(Course course) {
+    public void updateCourse(Course course) throws EntityNotFoundException {
         if (course == null) {
-            throw new NullPointerException("Course cannot be null.");
+            throw new EntityNotFoundException(Course.class, course.getCourseId());
         }
         courseDao.save(course);
-        logger.debug("Course {} updated.", course.getCourseName());
+        log.debug("Course {} updated.", course.getCourseName());
     }
 
     @Override
@@ -53,14 +60,23 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void assignCourses(Course course, Teacher teacher) {
-        if (course == null || teacher == null) {
-            throw new NullPointerException("Object cannot be null");
+    public void assignCourses(Course course, Teacher teacher) throws EntityNotFoundException {
+        if (course == null) {
+            throw new EntityNotFoundException(Course.class, course.getCourseId());
+        }
+        if (teacher == null) {
+            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
         }
         teacher.getCourses().add(course);
         course.setTeacher(teacher);
         courseDao.save(course);
-        logger.debug("Course {} assigned to teacher {} {}.", course.getCourseName(),
+        teacherDao.save(teacher);
+        log.debug("Course {} assigned to teacher {} {}.", course.getCourseName(),
                 teacher.getFirstName(), teacher.getLastName());
+    }
+
+    @Override
+    public Course findByCourseName(String courseName) {
+        return courseDao.findByCourseNameIn(courseName);
     }
 }

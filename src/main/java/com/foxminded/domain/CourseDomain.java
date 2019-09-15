@@ -1,5 +1,6 @@
 package com.foxminded.domain;
 
+import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Course;
 import com.foxminded.model.ScheduleItem;
 import com.foxminded.model.Teacher;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 public class CourseDomain {
@@ -19,7 +21,7 @@ public class CourseDomain {
         this.courseService = courseService;
     }
 
-    public List<Course> createCourses() {
+    public List<Course> createCourses() throws EntityNotFoundException {
         List<Course> courses = new ArrayList<>();
         for (String course_name : COURSE_NAMES) {
             courses.add(courseService.createCourse(course_name));
@@ -27,17 +29,13 @@ public class CourseDomain {
         return courses;
     }
 
-    public void assignCourses(List<ScheduleItem> scheduleItems, List<Teacher> teachers) {
-        if (scheduleItems == null || teachers == null) {
+    public void assignCourses(List<Course> courses, List<Teacher> teachers) throws EntityNotFoundException {
+        if (courses == null || teachers == null) {
             throw new NullPointerException("Objects cannot be null");
         }
+        int index = 0;
         for (Teacher teacher : teachers) {
-            for (ScheduleItem scheduleItem : scheduleItems) {
-                if (scheduleItem.getTeacher().equals(teacher)) {
-                    Course course = scheduleItem.getCourse();
-                    courseService.assignCourses(course, teacher);
-                }
-            }
+            courseService.assignCourses(courses.get(index++), teacher);
         }
     }
 }
