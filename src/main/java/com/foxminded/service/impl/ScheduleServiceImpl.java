@@ -8,8 +8,6 @@ import com.foxminded.model.ScheduleItem;
 import com.foxminded.model.Teacher;
 import com.foxminded.service.ScheduleItemService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +51,7 @@ public class ScheduleServiceImpl implements ScheduleItemService {
     }
 
     @Override
-    public List<ScheduleItem> findMonthSchedule(Group group) throws EntityNotFoundException{
+    public List<ScheduleItem> findMonthSchedule(Group group) throws EntityNotFoundException {
         if (group == null) {
             throw new EntityNotFoundException(Group.class, group.getGroupId());
         }

@@ -21,7 +21,7 @@ public class GroupDomain {
         this.groupService = groupService;
     }
 
-    public List<Group> createGroup(int numberOfGroups) throws EntityNotFoundException{
+    public List<Group> createGroup(int numberOfGroups) throws EntityNotFoundException {
         List<Group> groups = new ArrayList<>();
         if (numberOfGroups < 0) {
             throw new IllegalArgumentException();

@@ -1,9 +1,6 @@
 package com.foxminded.domain;
 
 
-import com.foxminded.model.Course;
-import com.foxminded.model.ScheduleItem;
-
 import com.foxminded.model.Teacher;
 import com.foxminded.service.TeacherService;
 import org.springframework.stereotype.Component;

@@ -54,7 +54,7 @@ public class GroupRestController {
 
     @PutMapping(value = "{id}/{firstName}/{lastName}")
     public Group addStudent(@PathVariable("id") Long id, @PathVariable("firstName") String firstName,
-                           @PathVariable("lastName") String lastName) throws EntityNotFoundException {
+                            @PathVariable("lastName") String lastName) throws EntityNotFoundException {
         Group group = groupService.findGroupById(id);
         Student student = studentService.createStudent(firstName, lastName);
         groupService.assignStudents(group, student);

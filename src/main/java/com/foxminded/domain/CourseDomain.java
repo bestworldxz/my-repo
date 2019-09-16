@@ -2,14 +2,12 @@ package com.foxminded.domain;
 
 import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Course;
-import com.foxminded.model.ScheduleItem;
 import com.foxminded.model.Teacher;
 import com.foxminded.service.CourseService;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 public class CourseDomain {

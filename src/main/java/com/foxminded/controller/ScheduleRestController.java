@@ -23,12 +23,12 @@ public class ScheduleRestController {
     }
 
     @GetMapping
-    public List<ScheduleItem> getAll(){
+    public List<ScheduleItem> getAll() {
         return scheduleItemService.findAll();
     }
 
     @GetMapping(value = "{date}")
-    public List<ScheduleItem> getScheduleForDate(@PathVariable("date") String date){
+    public List<ScheduleItem> getScheduleForDate(@PathVariable("date") String date) {
         LocalDate day = LocalDate.parse(date);
         return scheduleItemService.findAll().stream().filter(d -> d.getDate().equals(day))
                 .collect(Collectors.toList());
@@ -36,7 +36,7 @@ public class ScheduleRestController {
 
     @GetMapping(value = "{groupName}/{date}")
     public List<ScheduleItem> getDayScheduleForGroup(@PathVariable("groupName") String groupName,
-                                                     @PathVariable("date") String date){
+                                                     @PathVariable("date") String date) {
         LocalDate day = LocalDate.parse(date);
         return scheduleItemService.findAll().stream().filter(d -> d.getDate().equals(day))
                 .filter(g -> g.getGroup().getGroupName().equals(groupName))
@@ -44,7 +44,7 @@ public class ScheduleRestController {
     }
 
     @GetMapping(value = "{groupName}")
-    public List<ScheduleItem> getMonthScheduleForGroup(@PathVariable("groupName") String groupName){
+    public List<ScheduleItem> getMonthScheduleForGroup(@PathVariable("groupName") String groupName) {
         return scheduleItemService.findAll().stream()
                 .filter(g -> g.getGroup().getGroupName().equals(groupName))
                 .collect(Collectors.toList());

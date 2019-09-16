@@ -2,7 +2,6 @@ package com.foxminded.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,7 +33,6 @@ public class Course {
     @OneToMany(mappedBy = "course", orphanRemoval = true)
     @JsonIgnore
     private List<ScheduleItem> scheduleItems;
-
 
     public Course(String courseName) {
         this(0, courseName, null, new ArrayList<>());
