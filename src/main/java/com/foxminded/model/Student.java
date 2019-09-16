@@ -24,8 +24,8 @@ public class Student {
     @NotNull
     private String firstName;
 
-    @NotNull
     @Column(name = "last_name")
+    @NotNull
     private String lastName;
 
     @ManyToOne

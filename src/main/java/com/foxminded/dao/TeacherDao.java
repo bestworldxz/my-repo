@@ -13,4 +13,5 @@ public interface TeacherDao extends CrudRepository<Teacher, Long> {
     List<Teacher> findAll();
 
     Teacher findTeacherByTeacherId(long id);
+
 }

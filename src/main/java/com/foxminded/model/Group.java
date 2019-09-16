@@ -1,5 +1,6 @@
 package com.foxminded.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +31,7 @@ public class Group {
     private List<Student> students;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnore
     private List<ScheduleItem> scheduleItems;
 
     public Group(String groupName) {

@@ -46,8 +46,11 @@ public class TeacherRestController {
     }
 
     @DeleteMapping(value = "{id}/{courseName}")
-    public void deleteCourse(@PathVariable("id") Long id, @PathVariable("courseName") String courseName) throws EntityNotFoundException {
-        Course course = courseService.findByCourseName(courseName);
+    public void deleteCourse(@PathVariable("id") Long id,
+                             @PathVariable("courseName") String courseName) throws EntityNotFoundException {
+        Course course = teacherService.findTeacherById(id).getCourses()
+                .stream().filter(c -> c.getCourseName().equals(courseName))
+                .findAny().orElse(null);
         courseService.deleteCourse(course);
     }
 

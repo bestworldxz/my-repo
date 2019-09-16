@@ -1,5 +1,7 @@
 package com.foxminded.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +23,7 @@ public class ClassRoom {
     private Integer classRoom;
 
     @OneToMany(mappedBy = "classRoom")
+    @JsonIgnore
     private List<ScheduleItem> scheduleItem;
 
     public ClassRoom(int classRoom) {

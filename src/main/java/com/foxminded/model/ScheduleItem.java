@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -23,22 +25,18 @@ public class ScheduleItem implements Comparable<ScheduleItem> {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    @JsonBackReference
     private Group group;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
-    @JsonBackReference
     private Teacher teacher;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
-    @JsonBackReference
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "class_room_id")
-    @JsonBackReference
     private ClassRoom classRoom;
 
     public ScheduleItem(LocalDate date, Group group, Teacher teacher, Course course) {

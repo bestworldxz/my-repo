@@ -44,7 +44,7 @@ public class Components implements ApplicationRunner {
         List<Course> courses = courseDomain.createCourses();
         courseDomain.assignCourses(courses, teachers);
         List<ScheduleItem> scheduleItems = scheduleItemDomain.createScheduleItems(group, teachers);
-//        universityDomain.createSchedule(scheduleItems, classRooms);
+        universityDomain.createSchedule(scheduleItems, classRooms);
     }
 
     @Override
