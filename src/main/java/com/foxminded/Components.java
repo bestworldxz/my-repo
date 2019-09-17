@@ -36,8 +36,8 @@ public class Components implements ApplicationRunner {
 
     public void createUniversity(){
 
-        List<Group> group = groupDomain.createGroup(22);
-        studentDomain.createStudents(group, 8, 18);
+//        List<Group> group = groupDomain.createGroup(22);
+//        studentDomain.createStudents(group, 8, 18);
 //        List<Teacher> teachers = teacherDomain.createTeacher(9);
 //        List<ClassRoom> classRooms = classRoomDomain.createClassRooms(20);
 //        List<Course> courses = courseDomain.createCourses();
