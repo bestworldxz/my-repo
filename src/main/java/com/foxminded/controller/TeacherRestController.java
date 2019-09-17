@@ -1,6 +1,5 @@
 package com.foxminded.controller;
 
-import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Course;
 import com.foxminded.model.Teacher;
 import com.foxminded.service.CourseService;
@@ -30,7 +29,7 @@ public class TeacherRestController {
     }
 
     @GetMapping(value = "{id}")
-    public Teacher getTeacher(@PathVariable("id") Long teacherId) throws EntityNotFoundException {
+    public Teacher getTeacher(@PathVariable("id") Long teacherId){
         return teacherService.findTeacherById(teacherId);
     }
 
@@ -40,14 +39,14 @@ public class TeacherRestController {
     }
 
     @DeleteMapping(value = "{id}")
-    public void deleteTeacher(@PathVariable("id") Long id) throws EntityNotFoundException {
+    public void deleteTeacher(@PathVariable("id") Long id){
         Teacher teacher = teacherService.findTeacherById(id);
         teacherService.deleteTeacher(teacher);
     }
 
     @DeleteMapping(value = "{id}/{courseName}")
     public void deleteCourse(@PathVariable("id") Long id,
-                             @PathVariable("courseName") String courseName) throws EntityNotFoundException {
+                             @PathVariable("courseName") String courseName){
         Course course = teacherService.findTeacherById(id).getCourses()
                 .stream().filter(c -> c.getCourseName().equals(courseName))
                 .findAny().orElse(null);
@@ -55,7 +54,7 @@ public class TeacherRestController {
     }
 
     @PutMapping(value = "{id}/{courseName}")
-    public Teacher addCourse(@PathVariable("id") Long id, @PathVariable("courseName") String courseName) throws EntityNotFoundException {
+    public Teacher addCourse(@PathVariable("id") Long id, @PathVariable("courseName") String courseName){
         Teacher teacher = teacherService.findTeacherById(id);
         Course course = courseService.createCourse(courseName);
         courseService.assignCourses(course, teacher);

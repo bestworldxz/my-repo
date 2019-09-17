@@ -1,23 +1,28 @@
 package com.foxminded.service;
 
-import com.foxminded.exception.EntityNotFoundException;
+import com.foxminded.exception.DatabaseException;
 import com.foxminded.model.Group;
 import com.foxminded.model.Student;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GroupService {
 
-    Group createGroup(String groupName) throws EntityNotFoundException;
+    Group createGroup(String groupName);
 
-    List<Group> findAll();
+    List<Group> findAll() throws DatabaseException;
 
-    void delete(Group group) throws EntityNotFoundException;
+    void delete(Group group);
 
-    Group findGroupById(long id) throws EntityNotFoundException;
+    Group findGroupById(Long id);
 
-    Group update(Group group) throws EntityNotFoundException;
+    Group update(Group group);
 
-    void assignStudents(Group group, Student student) throws EntityNotFoundException;
+    void assignStudents(Group group, Student student);
+
+    Group findGroupByName(String groupName);
+
+    Group renameGroup(String newGroupName, Group group);
 
 }

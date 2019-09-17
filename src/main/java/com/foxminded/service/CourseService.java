@@ -1,6 +1,5 @@
 package com.foxminded.service;
 
-import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Course;
 import com.foxminded.model.Teacher;
 
@@ -8,15 +7,15 @@ import java.util.List;
 
 public interface CourseService {
 
-    Course createCourse(String courseName) throws EntityNotFoundException;
+    Course createCourse(String courseName);
 
-    void deleteCourse(Course course) throws EntityNotFoundException;
+    void deleteCourse(Course course);
 
-    void updateCourse(Course course) throws EntityNotFoundException;
+    void updateCourse(Course course);
 
     List<Course> findAll();
 
-    void assignCourses(Course course, Teacher teacher) throws EntityNotFoundException;
+    void assignCourses(Course course, Teacher teacher);
 
     Course findByCourseName(String courseName);
 }

@@ -17,4 +17,6 @@ public interface ScheduleItemDao extends CrudRepository<ScheduleItem, Long> {
     List<ScheduleItem> findByGroup(Group group);
 
     List<ScheduleItem> findByGroupAndDate(Group group, LocalDate date);
+
+    List<ScheduleItem> findByDate(LocalDate date);
 }

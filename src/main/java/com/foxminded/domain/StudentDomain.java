@@ -1,6 +1,5 @@
 package com.foxminded.domain;
 
-import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Group;
 import com.foxminded.model.Student;
 import com.foxminded.service.GroupService;
@@ -25,7 +24,7 @@ public class StudentDomain {
         this.groupService = groupService;
     }
 
-    public void createStudents(List<Group> groups, int minNumberOfStudents, int maxNumberOfStudents) throws EntityNotFoundException {
+    public void createStudents(List<Group> groups, int minNumberOfStudents, int maxNumberOfStudents){
         if (minNumberOfStudents < 0 || maxNumberOfStudents < 0 || minNumberOfStudents > maxNumberOfStudents) {
             throw new IllegalArgumentException();
         }

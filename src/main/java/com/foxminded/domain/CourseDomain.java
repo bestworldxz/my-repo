@@ -1,6 +1,5 @@
 package com.foxminded.domain;
 
-import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Course;
 import com.foxminded.model.Teacher;
 import com.foxminded.service.CourseService;
@@ -19,7 +18,7 @@ public class CourseDomain {
         this.courseService = courseService;
     }
 
-    public List<Course> createCourses() throws EntityNotFoundException {
+    public List<Course> createCourses(){
         List<Course> courses = new ArrayList<>();
         for (String course_name : COURSE_NAMES) {
             courses.add(courseService.createCourse(course_name));
@@ -27,7 +26,7 @@ public class CourseDomain {
         return courses;
     }
 
-    public void assignCourses(List<Course> courses, List<Teacher> teachers) throws EntityNotFoundException {
+    public void assignCourses(List<Course> courses, List<Teacher> teachers){
         if (courses == null || teachers == null) {
             throw new NullPointerException("Objects cannot be null");
         }

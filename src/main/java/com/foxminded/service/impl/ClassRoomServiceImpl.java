@@ -1,7 +1,6 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.dao.ClassRoomDao;
-import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.ClassRoom;
 import com.foxminded.service.ClassRoomService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +33,10 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     }
 
     @Override
-    public void deleteClassRoom(ClassRoom classRoom) throws EntityNotFoundException {
-        if (classRoom == null) {
-            throw new EntityNotFoundException(ClassRoom.class, classRoom.getClassRoomId());
-        }
+    public void deleteClassRoom(ClassRoom classRoom){
+//        if (classRoom == null) {
+//            throw new EntityNotFoundException(ClassRoom.class, classRoom.getClassRoomId());
+//        }
         classRoomDao.delete(classRoom);
         log.debug("Class room {} deleted.", classRoom.getClassRoom());
     }

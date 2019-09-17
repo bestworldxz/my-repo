@@ -1,7 +1,6 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.dao.ScheduleItemDao;
-import com.foxminded.exception.EntityNotFoundException;
 import com.foxminded.model.Course;
 import com.foxminded.model.Group;
 import com.foxminded.model.ScheduleItem;
@@ -34,10 +33,10 @@ public class ScheduleServiceImpl implements ScheduleItemService {
     }
 
     @Override
-    public void update(ScheduleItem scheduleItem) throws EntityNotFoundException {
-        if (scheduleItem == null) {
-            throw new EntityNotFoundException(ScheduleItem.class, scheduleItem.getId());
-        }
+    public void update(ScheduleItem scheduleItem){
+//        if (scheduleItem == null) {
+//            throw new EntityNotFoundException(ScheduleItem.class, scheduleItem.getId());
+//        }
         scheduleItemDao.save(scheduleItem);
         log.debug("Schedule item: date - {}, group - {}, teacher - {} {}, course - {} updated.",
                 scheduleItem.getDate(), scheduleItem.getGroup().getGroupName(),
@@ -51,18 +50,26 @@ public class ScheduleServiceImpl implements ScheduleItemService {
     }
 
     @Override
-    public List<ScheduleItem> findMonthSchedule(Group group) throws EntityNotFoundException {
-        if (group == null) {
-            throw new EntityNotFoundException(Group.class, group.getGroupId());
-        }
+    public List<ScheduleItem> findMonthSchedule(Group group){
+//        if (group == null) {
+//            throw new EntityNotFoundException(Group.class, group.getGroupId());
+//        }
         return scheduleItemDao.findByGroup(group);
     }
 
     @Override
-    public List<ScheduleItem> findDaySchedule(LocalDate localDate, Group group) {
+    public List<ScheduleItem> findDayScheduleForGroup(LocalDate localDate, Group group) {
         if (localDate == null || group == null) {
             throw new NullPointerException("Object cannot be null.");
         }
         return scheduleItemDao.findByGroupAndDate(group, localDate);
+    }
+
+    @Override
+    public List<ScheduleItem> findDaySchedule(LocalDate localDate){
+//        if (localDate == null) {
+//            throw new EntityNotFoundException(ScheduleItem.class, localDate);
+//        }
+        return scheduleItemDao.findByDate(localDate);
     }
 }
