@@ -8,7 +8,6 @@ import com.foxminded.service.GroupService;
 import com.foxminded.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 
@@ -24,8 +23,9 @@ public class GroupRestController {
         this.groupService = groupService;
         this.studentService = studentService;
     }
+
     @GetMapping("{id}")
-    Group findOne(@PathVariable Long id) throws EntityNotFoundException, MethodArgumentTypeMismatchException {
+    Group findOne(@PathVariable Long id) throws EntityNotFoundException {
         return groupService.findGroupById(id);
     }
 
@@ -35,7 +35,7 @@ public class GroupRestController {
     }
 
     @PostMapping(value = "{groupName}")
-    public Group create(@PathVariable("groupName") String groupName){
+    public Group create(@PathVariable("groupName") String groupName) {
         return groupService.createGroup(groupName);
     }
 
@@ -46,14 +46,14 @@ public class GroupRestController {
     }
 
     @PutMapping(value = "{id}/{newGroupName}")
-    public Group update(@PathVariable("id") Long id, @PathVariable("newGroupName") String newGroupName){
+    public Group update(@PathVariable("id") Long id, @PathVariable("newGroupName") String newGroupName) {
         Group group = groupService.findGroupById(id);
         return groupService.renameGroup(newGroupName, group);
     }
 
     @PutMapping(value = "{id}/{firstName}/{lastName}")
     public Group addStudent(@PathVariable("id") Long id, @PathVariable("firstName") String firstName,
-                            @PathVariable("lastName") String lastName){
+                            @PathVariable("lastName") String lastName) {
         Group group = groupService.findGroupById(id);
         Student student = studentService.createStudent(firstName, lastName);
         groupService.assignStudents(group, student);

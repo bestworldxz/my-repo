@@ -41,14 +41,14 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<Group> findAll() throws DatabaseException {
         List<Group> groups = groupDao.findAll();
-        if (groups.isEmpty()){
+        if (groups.isEmpty()) {
             throw new DatabaseException(Group.class);
         }
         return groupDao.findAll();
     }
 
     @Override
-    public void delete(Group group) {
+    public void delete(Group group) throws EntityNotFoundException {
         if (group == null) {
             throw new EntityNotFoundException(Group.class, group.getGroupId());
         }
@@ -57,8 +57,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group findGroupById(Long id) {
-        if (id == null || id <= 0){
+    public Group findGroupById(Long id) throws EntityNotFoundException {
+        if (id == null || id <= 0) {
             throw new EntityNotFoundException(Group.class, id);
         }
         Group group = groupDao.findGroupByGroupId(id);
@@ -69,7 +69,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group update(Group group) {
+    public Group update(Group group) throws EntityNotFoundException {
         if (group == null) {
             throw new EntityNotFoundException(Group.class, group.getGroupId());
         }
@@ -79,7 +79,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void assignStudents(Group group, Student student) {
+    public void assignStudents(Group group, Student student) throws EntityNotFoundException {
         if (group == null) {
             throw new EntityNotFoundException(Group.class, group.getGroupId());
         }
@@ -94,19 +94,11 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group findGroupByName(String groupName) throws WrongArgumentException {
-        if (groupName.isEmpty() || groupName.equals(" ")) {
-            throw new WrongArgumentException(Group.class, groupName);
-        }
-        return groupDao.findByGroupName(groupName);
-    }
-
-    @Override
-    public Group renameGroup(String newGroupName, Group group) throws WrongArgumentException {
-        if (newGroupName.equals(" ") || newGroupName.isEmpty()){
+    public Group renameGroup(String newGroupName, Group group) throws WrongArgumentException, EntityNotFoundException {
+        if (newGroupName.equals(" ") || newGroupName.isEmpty()) {
             throw new WrongArgumentException(Group.class, newGroupName);
         }
-        if (group == null){
+        if (group == null) {
             throw new EntityNotFoundException(Group.class, group.getGroupId());
         }
         group.setGroupName(newGroupName);

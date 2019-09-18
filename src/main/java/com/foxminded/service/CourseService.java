@@ -1,5 +1,6 @@
 package com.foxminded.service;
 
+import com.foxminded.exception.DatabaseException;
 import com.foxminded.model.Course;
 import com.foxminded.model.Teacher;
 
@@ -13,7 +14,7 @@ public interface CourseService {
 
     void updateCourse(Course course);
 
-    List<Course> findAll();
+    List<Course> findAll() throws DatabaseException;
 
     void assignCourses(Course course, Teacher teacher);
 

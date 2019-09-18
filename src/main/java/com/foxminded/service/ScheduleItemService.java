@@ -1,5 +1,6 @@
 package com.foxminded.service;
 
+import com.foxminded.exception.DatabaseException;
 import com.foxminded.model.Course;
 import com.foxminded.model.Group;
 import com.foxminded.model.ScheduleItem;
@@ -14,12 +15,12 @@ public interface ScheduleItemService {
 
     void update(ScheduleItem scheduleItem);
 
-    List<ScheduleItem> findAll();
+    List<ScheduleItem> findAll() throws DatabaseException;
 
     List<ScheduleItem> findMonthSchedule(Group group);
 
-    List<ScheduleItem> findDayScheduleForGroup(LocalDate localDate, Group group);
+    List<ScheduleItem> findDayScheduleForGroup(LocalDate localDate, Group group) throws DatabaseException;
 
-    List<ScheduleItem> findDaySchedule(LocalDate localDate);
+    List<ScheduleItem> findDaySchedule(LocalDate localDate) throws DatabaseException;
 
 }

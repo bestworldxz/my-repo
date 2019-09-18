@@ -1,5 +1,6 @@
 package com.foxminded.service;
 
+import com.foxminded.exception.DatabaseException;
 import com.foxminded.model.ScheduleItem;
 import com.foxminded.model.Teacher;
 
@@ -14,9 +15,9 @@ public interface TeacherService {
 
     void deleteTeacher(Teacher teacher);
 
-    List<Teacher> findAll();
+    List<Teacher> findAll() throws DatabaseException;
 
-    Teacher findTeacherById(long id);
+    Teacher findTeacherById(Long id);
 
     void assignSchedule(ScheduleItem scheduleItem, Teacher teacher);
 }

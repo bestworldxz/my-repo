@@ -15,5 +15,5 @@ public interface GroupDao extends JpaRepository<Group, Long> {
 
     Group findGroupByGroupId(long id);
 
-    Group findByGroupName(String groupName);
+    Group findGroupByGroupName(String groupName);
 }

@@ -34,16 +34,16 @@ public class Components implements ApplicationRunner {
         this.universityDomain = universityDomain;
     }
 
-    public void createUniversity(){
+    public void createUniversity() {
 
-//        List<Group> group = groupDomain.createGroup(22);
-//        studentDomain.createStudents(group, 8, 18);
-//        List<Teacher> teachers = teacherDomain.createTeacher(9);
-//        List<ClassRoom> classRooms = classRoomDomain.createClassRooms(20);
-//        List<Course> courses = courseDomain.createCourses();
-//        courseDomain.assignCourses(courses, teachers);
-//        List<ScheduleItem> scheduleItems = scheduleItemDomain.createScheduleItems(group, teachers);
-//        universityDomain.createSchedule(scheduleItems, classRooms);
+        List<Group> group = groupDomain.createGroup(22);
+        studentDomain.createStudents(group, 8, 18);
+        List<Teacher> teachers = teacherDomain.createTeacher(9);
+        List<ClassRoom> classRooms = classRoomDomain.createClassRooms(20);
+        List<Course> courses = courseDomain.createCourses();
+        courseDomain.assignCourses(courses, teachers);
+        List<ScheduleItem> scheduleItems = scheduleItemDomain.createScheduleItems(group, teachers);
+        universityDomain.createSchedule(scheduleItems, classRooms);
     }
 
     @Override

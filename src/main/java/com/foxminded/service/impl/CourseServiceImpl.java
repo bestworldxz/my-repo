@@ -2,6 +2,9 @@ package com.foxminded.service.impl;
 
 import com.foxminded.dao.CourseDao;
 import com.foxminded.dao.TeacherDao;
+import com.foxminded.exception.DatabaseException;
+import com.foxminded.exception.EntityNotFoundException;
+import com.foxminded.exception.WrongArgumentException;
 import com.foxminded.model.Course;
 import com.foxminded.model.Teacher;
 import com.foxminded.service.CourseService;
@@ -25,10 +28,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course createCourse(String courseName){
-//        if (courseName.equals("")) {
-//            throw new EntityNotFoundException(Course.class, courseName);
-//        }
+    public Course createCourse(String courseName) throws WrongArgumentException {
+        if (courseName.equals("")) {
+            throw new WrongArgumentException(Course.class, courseName);
+        }
         Course course = new Course(courseName);
         log.debug("Course {} created.", courseName);
         courseDao.save(course);
@@ -36,36 +39,40 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void deleteCourse(Course course){
-//        if (course == null) {
-//            throw new EntityNotFoundException(Course.class, course.getCourseId());
-//        }
+    public void deleteCourse(Course course) throws EntityNotFoundException {
+        if (course == null) {
+            throw new EntityNotFoundException(Course.class, course.getCourseId());
+        }
         courseDao.delete(course);
         log.debug("Course {} deleted.", course.getCourseName());
     }
 
     @Override
-    public void updateCourse(Course course){
-//        if (course == null) {
-//            throw new EntityNotFoundException(Course.class, course.getCourseId());
-//        }
+    public void updateCourse(Course course) throws EntityNotFoundException {
+        if (course == null) {
+            throw new EntityNotFoundException(Course.class, course.getCourseId());
+        }
         courseDao.save(course);
         log.debug("Course {} updated.", course.getCourseName());
     }
 
     @Override
-    public List<Course> findAll() {
+    public List<Course> findAll() throws DatabaseException {
+        List<Course> courses = courseDao.findAll();
+        if (courses.isEmpty()) {
+            throw new DatabaseException(Course.class);
+        }
         return courseDao.findAll();
     }
 
     @Override
-    public void assignCourses(Course course, Teacher teacher){
-//        if (course == null) {
-//            throw new EntityNotFoundException(Course.class, course.getCourseId());
-//        }
-//        if (teacher == null) {
-//            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
-//        }
+    public void assignCourses(Course course, Teacher teacher) throws EntityNotFoundException {
+        if (course == null) {
+            throw new EntityNotFoundException(Course.class, course.getCourseId());
+        }
+        if (teacher == null) {
+            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
+        }
         teacher.getCourses().add(course);
         course.setTeacher(teacher);
         courseDao.save(course);
@@ -75,7 +82,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course findByCourseName(String courseName) {
-        return courseDao.findCourseByCourseName(courseName);
+    public Course findByCourseName(String courseName) throws WrongArgumentException {
+        Course course = courseDao.findCourseByCourseName(courseName);
+        if (course == null) {
+            throw new WrongArgumentException(Course.class, courseName);
+        }
+        return course;
     }
 }

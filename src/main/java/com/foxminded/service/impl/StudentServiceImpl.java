@@ -21,7 +21,10 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student createStudent(String firstName, String lastName) throws WrongArgumentException{
-        if (firstName.equals(" ") || firstName.isEmpty()) {
+        if (firstName.equals(" ") || firstName.isEmpty() || firstName.matches("[0-9]+")) {
+            throw new WrongArgumentException(Student.class, firstName, lastName);
+        }
+        if (lastName.equals(" ") || lastName.isEmpty() || lastName.matches("[0-9]+")) {
             throw new WrongArgumentException(Student.class, firstName, lastName);
         }
         Student student = new Student(firstName, lastName);

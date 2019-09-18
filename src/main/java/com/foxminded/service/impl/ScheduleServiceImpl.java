@@ -1,6 +1,9 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.dao.ScheduleItemDao;
+import com.foxminded.exception.DatabaseException;
+import com.foxminded.exception.EntityNotFoundException;
+import com.foxminded.exception.WrongArgumentException;
 import com.foxminded.model.Course;
 import com.foxminded.model.Group;
 import com.foxminded.model.ScheduleItem;
@@ -21,9 +24,19 @@ public class ScheduleServiceImpl implements ScheduleItemService {
     private ScheduleItemDao scheduleItemDao;
 
     @Override
-    public ScheduleItem createScheduleItem(LocalDate localDate, Group group, Teacher teacher, Course course) {
-        if (localDate == null || group == null || teacher == null || course == null) {
-            throw new NullPointerException("Object cannot be null.");
+    public ScheduleItem createScheduleItem(LocalDate localDate, Group group, Teacher teacher, Course course)
+            throws EntityNotFoundException {
+        if (localDate == null) {
+            throw new EntityNotFoundException(LocalDate.class, localDate);
+        }
+        if (group == null) {
+            throw new EntityNotFoundException(Group.class, group.getGroupId());
+        }
+        if (teacher == null) {
+            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
+        }
+        if (course == null) {
+            throw new EntityNotFoundException(Course.class, course.getCourseId());
         }
         ScheduleItem scheduleItem = new ScheduleItem(localDate, group, teacher, course);
         log.debug("Schedule item: date - {}, group - {}, teacher - {} {}, course - {} created.",
@@ -33,10 +46,10 @@ public class ScheduleServiceImpl implements ScheduleItemService {
     }
 
     @Override
-    public void update(ScheduleItem scheduleItem){
-//        if (scheduleItem == null) {
-//            throw new EntityNotFoundException(ScheduleItem.class, scheduleItem.getId());
-//        }
+    public void update(ScheduleItem scheduleItem) throws EntityNotFoundException {
+        if (scheduleItem == null) {
+            throw new EntityNotFoundException(ScheduleItem.class, scheduleItem.getId());
+        }
         scheduleItemDao.save(scheduleItem);
         log.debug("Schedule item: date - {}, group - {}, teacher - {} {}, course - {} updated.",
                 scheduleItem.getDate(), scheduleItem.getGroup().getGroupName(),
@@ -45,31 +58,48 @@ public class ScheduleServiceImpl implements ScheduleItemService {
     }
 
     @Override
-    public List<ScheduleItem> findAll() {
+    public List<ScheduleItem> findAll() throws DatabaseException {
+        List<ScheduleItem> scheduleItems = scheduleItemDao.findAll();
+        if (scheduleItems.isEmpty()) {
+            throw new DatabaseException(ScheduleItem.class);
+        }
         return scheduleItemDao.findAll();
     }
 
     @Override
-    public List<ScheduleItem> findMonthSchedule(Group group){
-//        if (group == null) {
-//            throw new EntityNotFoundException(Group.class, group.getGroupId());
-//        }
+    public List<ScheduleItem> findMonthSchedule(Group group) throws EntityNotFoundException {
+        if (group == null) {
+            throw new EntityNotFoundException(Group.class, group.getGroupId());
+        }
         return scheduleItemDao.findByGroup(group);
     }
 
     @Override
-    public List<ScheduleItem> findDayScheduleForGroup(LocalDate localDate, Group group) {
-        if (localDate == null || group == null) {
-            throw new NullPointerException("Object cannot be null.");
+    public List<ScheduleItem> findDayScheduleForGroup(LocalDate localDate, Group group)
+            throws WrongArgumentException, EntityNotFoundException, DatabaseException {
+        if (localDate == null) {
+            throw new WrongArgumentException(LocalDate.class, localDate);
         }
-        return scheduleItemDao.findByGroupAndDate(group, localDate);
+        if (group == null) {
+            throw new EntityNotFoundException(Group.class, group.getGroupId());
+        }
+        List<ScheduleItem> scheduleItems = scheduleItemDao.findByGroupAndDate(group, localDate);
+        if (scheduleItems.isEmpty()) {
+            throw new DatabaseException(ScheduleItem.class);
+        }
+        return scheduleItems;
     }
 
     @Override
-    public List<ScheduleItem> findDaySchedule(LocalDate localDate){
-//        if (localDate == null) {
-//            throw new EntityNotFoundException(ScheduleItem.class, localDate);
-//        }
-        return scheduleItemDao.findByDate(localDate);
+    public List<ScheduleItem> findDaySchedule(LocalDate localDate)
+            throws WrongArgumentException, DatabaseException {
+        if (localDate == null) {
+            throw new WrongArgumentException(LocalDate.class, localDate);
+        }
+        List<ScheduleItem> scheduleItems = scheduleItemDao.findByDate(localDate);
+        if (scheduleItems.isEmpty()) {
+            throw new DatabaseException(ScheduleItem.class);
+        }
+        return scheduleItems;
     }
 }

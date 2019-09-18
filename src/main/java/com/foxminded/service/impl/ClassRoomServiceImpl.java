@@ -1,6 +1,9 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.dao.ClassRoomDao;
+import com.foxminded.exception.DatabaseException;
+import com.foxminded.exception.EntityNotFoundException;
+import com.foxminded.exception.WrongArgumentException;
 import com.foxminded.model.ClassRoom;
 import com.foxminded.service.ClassRoomService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +20,9 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     private ClassRoomDao classRoomDao;
 
     @Override
-    public ClassRoom createClassRoom(int numberOfClassRoom) {
-        if (numberOfClassRoom <= 0) {
-            throw new IllegalArgumentException("Class room cannot be zero or negative.");
+    public ClassRoom createClassRoom(Integer numberOfClassRoom) throws WrongArgumentException {
+        if (numberOfClassRoom <= 0 || numberOfClassRoom == null) {
+            throw new WrongArgumentException(ClassRoom.class, numberOfClassRoom);
         }
         ClassRoom classRoom = new ClassRoom(numberOfClassRoom);
         classRoomDao.save(classRoom);
@@ -28,15 +31,19 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     }
 
     @Override
-    public List<ClassRoom> findAll() {
+    public List<ClassRoom> findAll() throws DatabaseException {
+        List<ClassRoom> classRooms = classRoomDao.findAll();
+        if (classRooms.isEmpty()) {
+            throw new DatabaseException(ClassRoom.class);
+        }
         return classRoomDao.findAll();
     }
 
     @Override
-    public void deleteClassRoom(ClassRoom classRoom){
-//        if (classRoom == null) {
-//            throw new EntityNotFoundException(ClassRoom.class, classRoom.getClassRoomId());
-//        }
+    public void deleteClassRoom(ClassRoom classRoom) throws EntityNotFoundException {
+        if (classRoom == null) {
+            throw new EntityNotFoundException(ClassRoom.class, classRoom.getClassRoomId());
+        }
         classRoomDao.delete(classRoom);
         log.debug("Class room {} deleted.", classRoom.getClassRoom());
     }

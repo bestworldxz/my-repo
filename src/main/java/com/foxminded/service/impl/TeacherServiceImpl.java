@@ -1,6 +1,9 @@
 package com.foxminded.service.impl;
 
 import com.foxminded.dao.TeacherDao;
+import com.foxminded.exception.DatabaseException;
+import com.foxminded.exception.EntityNotFoundException;
+import com.foxminded.exception.WrongArgumentException;
 import com.foxminded.model.ScheduleItem;
 import com.foxminded.model.Teacher;
 import com.foxminded.service.TeacherService;
@@ -18,9 +21,12 @@ public class TeacherServiceImpl implements TeacherService {
     private TeacherDao teacherDao;
 
     @Override
-    public Teacher createTeacher(String firstName, String lastName) {
-        if (firstName.equals("") || lastName.equals("")) {
-            throw new IllegalArgumentException("Teacher name cannot be empty.");
+    public Teacher createTeacher(String firstName, String lastName) throws WrongArgumentException {
+        if (firstName.equals(" ") || firstName.isEmpty() || firstName.matches("[0-9]+")) {
+            throw new WrongArgumentException(Teacher.class, firstName, lastName);
+        }
+        if (lastName.equals(" ") || lastName.isEmpty() || lastName.matches("[0-9]+")) {
+            throw new WrongArgumentException(Teacher.class, firstName, lastName);
         }
         Teacher teacher = new Teacher(firstName, lastName);
         teacherDao.save(teacher);
@@ -29,49 +35,49 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void updateTeacher(Teacher teacher){
-//        if (teacher == null) {
-//            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
-//        }
+    public void updateTeacher(Teacher teacher) throws EntityNotFoundException {
+        if (teacher == null) {
+            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
+        }
         teacherDao.save(teacher);
         log.debug("Teacher {} {} updated.", teacher.getFirstName(), teacher.getLastName());
     }
 
     @Override
-    public void deleteTeacher(Teacher teacher) {
-//        if (teacher == null) {
-//            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
-//        }
+    public void deleteTeacher(Teacher teacher) throws EntityNotFoundException {
+        if (teacher == null) {
+            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
+        }
         teacherDao.delete(teacher);
         log.debug("Teacher {} {} deleted.", teacher.getFirstName(), teacher.getLastName());
     }
 
     @Override
-    public List<Teacher> findAll() {
+    public List<Teacher> findAll() throws DatabaseException {
         return teacherDao.findAll();
     }
 
     @Override
-    public Teacher findTeacherById(long id){
-//        if (id <= 0) {
-//            throw new EntityNotFoundException(Teacher.class, id);
-//        }
+    public Teacher findTeacherById(Long id) throws EntityNotFoundException {
+        if (id <= 0 || id == null) {
+            throw new EntityNotFoundException(Teacher.class, id);
+        }
         Teacher teacher = teacherDao.findTeacherByTeacherId(id);
-//        if (teacher == null) {
-//            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
-//        }
+        if (teacher == null) {
+            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
+        }
         log.debug("Teacher {} {} founded.", teacher.getFirstName(), teacher.getLastName());
         return teacher;
     }
 
     @Override
-    public void assignSchedule(ScheduleItem scheduleItem, Teacher teacher){
-//        if (scheduleItem == null) {
-//            throw new EntityNotFoundException(ScheduleItem.class, scheduleItem.getId());
-//        }
-//        if (teacher == null) {
-//            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
-//        }
+    public void assignSchedule(ScheduleItem scheduleItem, Teacher teacher) throws EntityNotFoundException {
+        if (scheduleItem == null) {
+            throw new EntityNotFoundException(ScheduleItem.class, scheduleItem.getId());
+        }
+        if (teacher == null) {
+            throw new EntityNotFoundException(Teacher.class, teacher.getTeacherId());
+        }
         teacher.getScheduleItems().add(scheduleItem);
         teacherDao.save(teacher);
         log.debug("Schedule: group - {}, course - {}, auditory - {} assigned to teacher {} {}.",

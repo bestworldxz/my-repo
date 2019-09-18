@@ -1,5 +1,8 @@
 package com.foxminded.controller;
 
+import com.foxminded.exception.DatabaseException;
+import com.foxminded.exception.EntityNotFoundException;
+import com.foxminded.exception.WrongArgumentException;
 import com.foxminded.model.Course;
 import com.foxminded.model.Teacher;
 import com.foxminded.service.CourseService;
@@ -13,7 +16,6 @@ import java.util.List;
 @RequestMapping(value = "/teachers")
 public class TeacherRestController {
 
-
     private TeacherService teacherService;
     private CourseService courseService;
 
@@ -23,30 +25,31 @@ public class TeacherRestController {
         this.courseService = courseService;
     }
 
-    @GetMapping()
-    public List<Teacher> teacherList() {
+    @GetMapping
+    public List<Teacher> teacherList() throws DatabaseException {
         return teacherService.findAll();
     }
 
     @GetMapping(value = "{id}")
-    public Teacher getTeacher(@PathVariable("id") Long teacherId){
+    public Teacher getTeacher(@PathVariable("id") Long teacherId) throws EntityNotFoundException {
         return teacherService.findTeacherById(teacherId);
     }
 
     @PostMapping(value = "{firstName}/{lastName}")
-    public Teacher createTeacher(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName) {
+    public Teacher createTeacher(@PathVariable("firstName") String firstName,
+                                 @PathVariable("lastName") String lastName) throws WrongArgumentException {
         return teacherService.createTeacher(firstName, lastName);
     }
 
     @DeleteMapping(value = "{id}")
-    public void deleteTeacher(@PathVariable("id") Long id){
+    public void deleteTeacher(@PathVariable("id") Long id) throws EntityNotFoundException {
         Teacher teacher = teacherService.findTeacherById(id);
         teacherService.deleteTeacher(teacher);
     }
 
     @DeleteMapping(value = "{id}/{courseName}")
     public void deleteCourse(@PathVariable("id") Long id,
-                             @PathVariable("courseName") String courseName){
+                             @PathVariable("courseName") String courseName) throws EntityNotFoundException, WrongArgumentException {
         Course course = teacherService.findTeacherById(id).getCourses()
                 .stream().filter(c -> c.getCourseName().equals(courseName))
                 .findAny().orElse(null);
@@ -54,7 +57,8 @@ public class TeacherRestController {
     }
 
     @PutMapping(value = "{id}/{courseName}")
-    public Teacher addCourse(@PathVariable("id") Long id, @PathVariable("courseName") String courseName){
+    public Teacher addCourse(@PathVariable("id") Long id,
+                             @PathVariable("courseName") String courseName) throws EntityNotFoundException, WrongArgumentException {
         Teacher teacher = teacherService.findTeacherById(id);
         Course course = courseService.createCourse(courseName);
         courseService.assignCourses(course, teacher);

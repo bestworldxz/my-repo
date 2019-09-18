@@ -21,8 +21,6 @@ public interface GroupService {
 
     void assignStudents(Group group, Student student);
 
-    Group findGroupByName(String groupName);
-
     Group renameGroup(String newGroupName, Group group);
 
 }
